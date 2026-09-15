@@ -1,14 +1,7 @@
-import { Route, Routes } from "react-router";
+import Header from "./components/layout/Header";
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<h1>Home</h1>} />
-      <Route path="/search" element={<h1>Search</h1>} />
-      <Route path="/movie/:id" element={<h1>Movie Details</h1>} />
-      <Route path="/favorites" element={<h1>Favorites</h1>} />
-    </Routes>
-  );
+  return <Header />;
 }
 
 export default App;
