@@ -2,9 +2,15 @@ import type { Movie } from "../../data/movies";
 
 interface MovieCardProps {
   movie: Movie;
+  handleFavorites: (movie: Movie) => void;
+  isFavorite: boolean;
 }
 
-export default function MovieCard({ movie }: MovieCardProps) {
+export default function MovieCard({
+  movie,
+  handleFavorites,
+  isFavorite,
+}: MovieCardProps) {
   return (
     <article className="group overflow-hidden rounded-xl border border-border bg-surface transition duration-200 hover:-translate-y-1 hover:border-surface-hover hover:shadow-lg">
       <div className="relative aspect-2/3 overflow-hidden">
@@ -15,7 +21,12 @@ export default function MovieCard({ movie }: MovieCardProps) {
         />
 
         <button
-          className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-full bg-black/60 text-primary-text backdrop-blur-sm transition hover:bg-accent hover:text-white cursor-pointer"
+          onClick={() => handleFavorites(movie)}
+          className={`absolute right-3 top-3 flex size-8 items-center justify-center rounded-full backdrop-blur-sm transition cursor-pointer ${
+            isFavorite
+              ? "bg-accent text-white"
+              : "bg-black/60 text-primary-text hover:bg-accent hover:text-white"
+          }`}
           aria-label={`Add ${movie.title} to favorites`}
         >
           <svg
@@ -23,7 +34,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill="none"
+            fill={isFavorite ? "currentColor" : "none"}
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
