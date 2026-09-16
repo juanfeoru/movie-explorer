@@ -1,12 +1,14 @@
-import { movies, type Movie } from "../../data/movies";
+import type { Movie } from "../../data/movies";
 import MovieCard from "./MovieCard";
 
 interface MovieGridProps {
+  movies: Movie[];
   handleFavorites: (movie: Movie) => void;
   favorites: Movie[];
 }
 
 export default function MovieGrid({
+  movies,
   handleFavorites,
   favorites,
 }: MovieGridProps) {
