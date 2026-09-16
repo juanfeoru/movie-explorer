@@ -1,7 +1,15 @@
-import { movies } from "../../data/movies";
+import { movies, type Movie } from "../../data/movies";
 import MovieCard from "./MovieCard";
 
-export default function MovieGrid() {
+interface MovieGridProps {
+  handleFavorites: (movie: Movie) => void;
+  favorites: Movie[];
+}
+
+export default function MovieGrid({
+  handleFavorites,
+  favorites,
+}: MovieGridProps) {
   return (
     <section className="px-6 pb-16">
       <div className="mx-auto max-w-7xl">
@@ -22,9 +30,20 @@ export default function MovieGrid() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {movies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))}
+          {movies.map((movie) => {
+            const isFavorite = favorites.some(
+              (favorite) => favorite.id === movie.id,
+            );
+
+            return (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                handleFavorites={handleFavorites}
+                isFavorite={isFavorite}
+              />
+            );
+          })}
         </div>
       </div>
     </section>

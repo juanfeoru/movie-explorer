@@ -39,7 +39,6 @@ export default function Header() {
                     : "text-secondary-text hover:text-primary-text"
                 }`
               }
-
             >
               Home
             </NavLink>
@@ -130,29 +129,47 @@ export default function Header() {
       {isOpen && (
         <div className="absolute left-0 top-16 z-50 w-full border-b border-border bg-surface md:hidden">
           <nav className="flex flex-col px-6 py-4">
-            <a
-              href="/"
-              className="border-b border-border py-3 text-sm font-medium text-secondary-text transition-colors hover:text-primary-text"
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `border-b border-border py-3 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "text-primary-text"
+                    : "text-secondary-text hover:text-primary-text"
+                }`
+              }
               onClick={() => setIsOpen(false)}
             >
               Home
-            </a>
+            </NavLink>
 
-            <a
-              href="/discover"
-              className="border-b border-border py-3 text-sm font-medium text-secondary-text transition-colors hover:text-primary-text"
+            <NavLink
+              to="/discover"
+              className={({ isActive }) =>
+                `border-b border-border py-3 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "text-primary-text"
+                    : "text-secondary-text hover:text-primary-text"
+                }`
+              }
               onClick={() => setIsOpen(false)}
             >
               Discover
-            </a>
+            </NavLink>
 
-            <a
-              href="/favorites"
-              className="border-b border-border py-3 text-sm font-medium text-secondary-text transition-colors hover:text-primary-text"
+            <NavLink
+              to="/favorites"
+              className={({ isActive }) =>
+                `border-b border-border py-3 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "text-primary-text"
+                    : "text-secondary-text hover:text-primary-text"
+                }`
+              }
               onClick={() => setIsOpen(false)}
             >
               Favorites
-            </a>
+            </NavLink>
 
             <button
               type="button"
