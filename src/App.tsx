@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Header from "./components/layout/Header";
 import Home from "./pages/Home";
-import type { Movie } from "./data/movies";
+import { movies, type Movie } from "./data/movies";
 import Favorites from "./pages/Favorites";
 import { Route, Routes } from "react-router";
+import Discover from "./pages/Discover";
 
 function App() {
   const [favorites, setFavorites] = useState<Movie[]>([]);
@@ -31,7 +32,22 @@ function App() {
           <Route
             path="/"
             element={
-              <Home handleFavorites={handleFavorites} favorites={favorites} />
+              <Home
+                movies={movies}
+                handleFavorites={handleFavorites}
+                favorites={favorites}
+              />
+            }
+          />
+
+          <Route
+            path="/discover"
+            element={
+              <Discover
+                movies={movies}
+                handleFavorites={handleFavorites}
+                favorites={favorites}
+              />
             }
           />
 
