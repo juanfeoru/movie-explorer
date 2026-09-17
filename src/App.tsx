@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/layout/Header";
 import Home from "./pages/Home";
 import { movies, type Movie } from "./data/movies";
@@ -8,7 +8,19 @@ import Discover from "./pages/Discover";
 import MovieDetails from "./pages/MovieDetails";
 
 function App() {
-  const [favorites, setFavorites] = useState<Movie[]>([]);
+  const [favorites, setFavorites] = useState<Movie[]>(() => {
+    const savedFavorites = localStorage.getItem("favorites");
+
+    if (savedFavorites) {
+      return JSON.parse(savedFavorites);
+    }
+
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
 
   function handleFavorites(movie: Movie) {
     setFavorites((currentFavorites) => {
