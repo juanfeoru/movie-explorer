@@ -40,3 +40,36 @@ export async function getPopularMovies(): Promise<Movie[]> {
 
   return movies;
 }
+
+export async function searchMovies(query: string): Promise<Movie[]> {
+  const encodedQuery = encodeURIComponent(query);
+
+  const response = await fetch(
+    `${TMDB_BASE_URL}/search/movie?query=${encodedQuery}`,
+    {
+      headers: {
+        Authorization: `Bearer ${TMDB_TOKEN}`,
+        accept: "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch search movies");
+  }
+
+  const data = await response.json();
+
+  const movies = data.results.map((movie: TMDBMovie) => {
+    return {
+      id: movie.id,
+      title: movie.title,
+      poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+      year: Number(movie.release_date.split("-")[0]),
+      genre: GENRES[movie.genre_ids[0]] ?? "Unknown",
+      rating: movie.vote_average,
+    };
+  });
+
+  return movies;
+}
