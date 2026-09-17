@@ -2,6 +2,7 @@ import type { Movie } from "../data/movies";
 import MovieGrid from "../components/home/MovieGrid";
 import { useEffect, useState } from "react";
 import { searchMovies } from "../api/tmdb";
+import { GENRES } from "../constants/genres";
 
 interface DiscoverProps {
   movies: Movie[];
@@ -14,7 +15,7 @@ export default function Discover({
   handleFavorites,
   favorites,
 }: DiscoverProps) {
-  type GenreType = "all" | "action" | "animation" | "drama" | "sci-fi";
+  type GenreType = "all" | string;
 
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState<GenreType>("all");
@@ -101,14 +102,16 @@ export default function Discover({
 
           <select
             value={genre}
-            onChange={(e) => setGenre(e.target.value as GenreType)}
+            onChange={(e) => setGenre(e.target.value)}
             className="cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-secondary-text outline-none transition focus:border-accent"
           >
             <option value="all">All genres</option>
-            <option value="action">Action</option>
-            <option value="animation">Animation</option>
-            <option value="drama">Drama</option>
-            <option value="sci-fi">Sci-Fi</option>
+
+            {Object.entries(GENRES).map(([id, name]) => (
+              <option key={id} value={name.toLowerCase()}>
+                {name}
+              </option>
+            ))}
           </select>
         </div>
         {searchLoading ? (
