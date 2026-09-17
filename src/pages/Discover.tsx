@@ -41,7 +41,11 @@ export default function Discover({
       }
     }
 
-    searchMoviesFromApi();
+    const timeout = setTimeout(() => {
+      searchMoviesFromApi();
+    }, 500);
+
+    return () => clearTimeout(timeout);
   }, [search]);
 
   const moviesToDisplay = search.trim() ? searchResults : movies;
