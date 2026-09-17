@@ -5,6 +5,7 @@ import { movies, type Movie } from "./data/movies";
 import Favorites from "./pages/Favorites";
 import { Route, Routes } from "react-router";
 import Discover from "./pages/Discover";
+import MovieDetails from "./pages/MovieDetails";
 
 function App() {
   const [favorites, setFavorites] = useState<Movie[]>([]);
@@ -57,6 +58,17 @@ function App() {
               <Favorites
                 favorites={favorites}
                 handleFavorites={handleFavorites}
+              />
+            }
+          />
+
+          <Route
+            path="/movie/:id"
+            element={
+              <MovieDetails
+                movies={movies}
+                handleFavorites={handleFavorites}
+                favorites={favorites}
               />
             }
           />
