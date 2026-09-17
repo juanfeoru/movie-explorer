@@ -38,7 +38,7 @@ export default function MovieCard({
             <div className="mt-3 flex items-center gap-1 text-sm">
               <span className="text-accent">★</span>
               <span className="font-medium text-primary-text">
-                {movie.rating}
+                {movie.rating.toFixed(1)}
               </span>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import type { Movie } from "../data/movies";
 import MovieGrid from "../components/home/MovieGrid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { searchMovies } from "../api/tmdb";
 
 interface DiscoverProps {
   movies: Movie[];
@@ -17,18 +18,44 @@ export default function Discover({
 
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState<GenreType>("all");
+  const [searchResults, setSearchResults] = useState<Movie[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
 
-  const filteredMovies = movies.filter((movie) => {
-    const matchesSearch = movie.title
-      .trim()
-      .toLowerCase()
-      .includes(search.trim().toLowerCase());
+  useEffect(() => {
+    async function searchMoviesFromApi() {
+      if (!search.trim()) {
+        setSearchResults([]);
+        return;
+      }
 
+      setSearchLoading(true);
+
+      try {
+        const results = await searchMovies(search);
+
+        setSearchResults(results);
+      } catch {
+        setSearchResults([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    }
+
+    const timeout = setTimeout(() => {
+      searchMoviesFromApi();
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [search]);
+
+  const moviesToDisplay = search.trim() ? searchResults : movies;
+
+  const filteredMovies = moviesToDisplay.filter((movie) => {
     const matchesGenre =
       genre === "all" ||
       movie.genre.toLowerCase().includes(genre.toLowerCase());
 
-    return matchesSearch && matchesGenre;
+    return matchesGenre;
   });
 
   return (
@@ -64,7 +91,7 @@ export default function Discover({
             </svg>
 
             <input
-              type="text"
+              type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for a movie..."
@@ -84,7 +111,11 @@ export default function Discover({
             <option value="sci-fi">Sci-Fi</option>
           </select>
         </div>
-        {filteredMovies.length === 0 ? (
+        {searchLoading ? (
+          <div className="flex min-h-80 items-center justify-center">
+            <div className="size-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent" />
+          </div>
+        ) : filteredMovies.length === 0 ? (
           <div className="flex min-h-80 flex-col items-center justify-center rounded-xl border border-border bg-surface px-6 text-center">
             <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-surface-hover text-accent">
               <svg
