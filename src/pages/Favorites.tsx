@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import MovieCard from "../components/home/MovieCard";
-import type { Movie } from "../data/movies";
+import type { Movie } from "../types/movies";
 
 interface FavoritesProps {
   favorites: Movie[];

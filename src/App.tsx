@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./components/layout/Header";
 import Home from "./pages/Home";
-import type { Movie } from "./data/movies";
+import type { Movie } from "./types/movies";
 import Favorites from "./pages/Favorites";
 import { Route, Routes } from "react-router";
 import Discover from "./pages/Discover";
@@ -134,7 +134,6 @@ function App() {
               path="/movie/:id"
               element={
                 <MovieDetails
-                  movies={movies}
                   handleFavorites={handleFavorites}
                   favorites={favorites}
                 />

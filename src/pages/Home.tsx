@@ -1,6 +1,6 @@
 import Hero from "../components/home/Hero";
 import MovieGrid from "../components/home/MovieGrid";
-import type { Movie } from "../data/movies";
+import type { Movie } from "../types/movies";
 
 interface HomeProps {
   movies: Movie[];
