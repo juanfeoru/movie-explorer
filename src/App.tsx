@@ -28,9 +28,9 @@ function App() {
         const data = await getPopularMovies();
 
         setMovies(data);
-        setLoading(false);
       } catch {
         setError("Failed to load movies");
+      } finally {
         setLoading(false);
       }
     }

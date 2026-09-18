@@ -1,4 +1,21 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+
 export default function Hero() {
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+
+  function handleSearch() {
+    if (!search.trim()) return;
+
+    const encodedSearch = encodeURIComponent(search.trim());
+
+    navigate({
+      pathname: "/discover",
+      search: `?search=${encodedSearch}`,
+    });
+  }
+
   return (
     <section className="px-6 py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-4xl text-center">
@@ -33,13 +50,18 @@ export default function Hero() {
               </svg>
 
               <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 type="text"
                 placeholder="Search for a movie..."
                 className="w-full flex-1 bg-transparent px-4 py-3 pl-11 text-sm text-primary-text outline-none placeholder:text-muted-text"
               />
             </div>
 
-            <button className="rounded-lg bg-accent px-5 py-3 text-sm font-medium text-primary-text transition hover:opacity-90 cursor-pointer">
+            <button
+              onClick={handleSearch}
+              className="rounded-lg bg-accent px-5 py-3 text-sm font-medium text-primary-text transition hover:opacity-90 cursor-pointer"
+            >
               Search
             </button>
           </div>

@@ -69,24 +69,6 @@ export default function Header() {
           </div>
         </nav>
 
-        <div className="ml-auto hidden md:flex">
-          <button type="button" className="cursor-pointer" aria-label="Search">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="size-6 text-secondary-text transition-colors hover:text-primary-text"
-            >
-              <path d="m21 21-4.34-4.34" />
-              <circle cx="11" cy="11" r="8" />
-            </svg>
-          </button>
-        </div>
-
         <button
           type="button"
           className="ml-auto cursor-pointer md:hidden"
@@ -160,7 +142,7 @@ export default function Header() {
             <NavLink
               to="/favorites"
               className={({ isActive }) =>
-                `border-b border-border py-3 text-sm font-medium transition-colors ${
+                `py-3 text-sm font-medium transition-colors ${
                   isActive
                     ? "text-primary-text"
                     : "text-secondary-text hover:text-primary-text"
@@ -170,26 +152,6 @@ export default function Header() {
             >
               Favorites
             </NavLink>
-
-            <button
-              type="button"
-              className="flex items-center gap-3 py-3 text-left text-sm font-medium text-secondary-text transition-colors hover:text-primary-text"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="size-5"
-              >
-                <path d="m21 21-4.34-4.34" />
-                <circle cx="11" cy="11" r="8" />
-              </svg>
-              Search
-            </button>
           </nav>
         </div>
       )}

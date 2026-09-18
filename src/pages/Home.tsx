@@ -16,11 +16,26 @@ export default function Home({
   return (
     <>
       <Hero />
-      <MovieGrid
-        movies={movies}
-        handleFavorites={handleFavorites}
-        favorites={favorites}
-      />
+
+      <section className="px-6 pb-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-6">
+            <span className="text-sm font-semibold uppercase tracking-widest text-accent">
+              Explore
+            </span>
+
+            <h2 className="mt-1 text-2xl font-bold tracking-tight text-primary-text sm:text-3xl">
+              Popular Movies
+            </h2>
+          </div>
+
+          <MovieGrid
+            movies={movies}
+            handleFavorites={handleFavorites}
+            favorites={favorites}
+          />
+        </div>
+      </section>
     </>
   );
 }
