@@ -41,16 +41,7 @@ export async function getPopularMovies(): Promise<Movie[]> {
 
   const data = await response.json();
 
-  const movies = data.results.map((movie: TMDBMovie) => {
-    return {
-      id: movie.id,
-      title: movie.title,
-      poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-      year: Number(movie.release_date.split("-")[0]),
-      genre: GENRES[movie.genre_ids[0]],
-      rating: movie.vote_average,
-    };
-  });
+  const movies = data.results.map(mapTMDBMovie);
 
   return movies;
 }
@@ -74,16 +65,7 @@ export async function searchMovies(query: string): Promise<Movie[]> {
 
   const data = await response.json();
 
-  const movies = data.results.map((movie: TMDBMovie) => {
-    return {
-      id: movie.id,
-      title: movie.title,
-      poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-      year: Number(movie.release_date.split("-")[0]),
-      genre: GENRES[movie.genre_ids[0]] ?? "Unknown",
-      rating: movie.vote_average,
-    };
-  });
+  const movies = data.results.map(mapTMDBMovie);
 
   return movies;
 }
@@ -114,4 +96,15 @@ export async function getMovieDetails(id: number): Promise<Movie> {
   };
 
   return movie;
+}
+
+function mapTMDBMovie(movie: TMDBMovie): Movie {
+  return {
+    id: movie.id,
+    title: movie.title,
+    poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+    year: Number(movie.release_date.split("-")[0]),
+    genre: GENRES[movie.genre_ids[0]] ?? "Unknown",
+    rating: movie.vote_average,
+  };
 }

@@ -3,6 +3,7 @@ import MovieGrid from "../components/home/MovieGrid";
 import { useEffect, useState } from "react";
 import { searchMovies } from "../api/tmdb";
 import { GENRES } from "../constants/genres";
+import { useSearchParams } from "react-router";
 
 interface DiscoverProps {
   movies: Movie[];
@@ -17,7 +18,11 @@ export default function Discover({
 }: DiscoverProps) {
   type GenreType = "all" | string;
 
-  const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const urlSearch = searchParams.get("search");
+
+  const [search, setSearch] = useState(urlSearch ?? "");
   const [genre, setGenre] = useState<GenreType>("all");
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -44,10 +49,14 @@ export default function Discover({
 
     const timeout = setTimeout(() => {
       searchMoviesFromApi();
+
+      setSearchParams({
+        search: search,
+      });
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, [search]);
+  }, [search, setSearchParams]);
 
   const moviesToDisplay = search.trim() ? searchResults : movies;
 
@@ -94,7 +103,9 @@ export default function Discover({
             <input
               type="search"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
               placeholder="Search for a movie..."
               className="w-full rounded-xl border border-border bg-surface px-4 py-3 pl-11 text-sm text-primary-text outline-none transition placeholder:text-muted-text focus:border-accent"
             />
