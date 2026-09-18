@@ -6,7 +6,7 @@ import Favorites from "./pages/Favorites";
 import { Route, Routes } from "react-router";
 import Discover from "./pages/Discover";
 import MovieDetails from "./pages/MovieDetails";
-import { getMovieDetails, getPopularMovies } from "./api/tmdb";
+import { getPopularMovies } from "./api/tmdb";
 
 function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
