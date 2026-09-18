@@ -1,5 +1,5 @@
 import { GENRES } from "../constants/genres";
-import type { Movie } from "../data/movies";
+import type { Movie } from "../types/movies";
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const TMDB_TOKEN = import.meta.env.VITE_TMDB_TOKEN;
@@ -11,6 +11,20 @@ interface TMDBMovie {
   release_date: string;
   vote_average: number;
   genre_ids: number[];
+}
+
+interface TMDBMovieDetails {
+  id: number;
+  title: string;
+  poster_path: string;
+  release_date: string;
+  vote_average: number;
+  genres: {
+    id: number;
+    name: string;
+  }[];
+  overview: string;
+  runtime: number;
 }
 
 export async function getPopularMovies(): Promise<Movie[]> {
@@ -72,4 +86,32 @@ export async function searchMovies(query: string): Promise<Movie[]> {
   });
 
   return movies;
+}
+
+export async function getMovieDetails(id: number): Promise<Movie> {
+  const response = await fetch(`${TMDB_BASE_URL}/movie/${id}`, {
+    headers: {
+      Authorization: `Bearer ${TMDB_TOKEN}`,
+      accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch movie details");
+  }
+
+  const data: TMDBMovieDetails = await response.json();
+
+  const movie = {
+    id: data.id,
+    title: data.title,
+    poster: `https://image.tmdb.org/t/p/w500${data.poster_path}`,
+    year: Number(data.release_date.split("-")[0]),
+    genre: data.genres[0]?.name ?? "Unknown",
+    rating: data.vote_average,
+    overview: data.overview,
+    runtime: data.runtime,
+  };
+
+  return movie;
 }

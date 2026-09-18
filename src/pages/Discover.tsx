@@ -1,4 +1,4 @@
-import type { Movie } from "../data/movies";
+import type { Movie } from "../types/movies";
 import MovieGrid from "../components/home/MovieGrid";
 import { useEffect, useState } from "react";
 import { searchMovies } from "../api/tmdb";
