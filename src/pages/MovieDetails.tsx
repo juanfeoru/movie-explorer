@@ -144,7 +144,16 @@ export default function MovieDetails({
             <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-secondary-text">
               <span>{movie.year}</span>
               <span>•</span>
-              <span>{movie.genre}</span>
+              <div className="flex flex-wrap gap-2">
+                {movie.genres.map((genre) => (
+                  <span
+                    key={genre}
+                    className="rounded-full border border-border bg-surface px-3 py-1 text-sm text-secondary-text"
+                  >
+                    {genre}
+                  </span>
+                ))}
+              </div>
               <span>•</span>
               <span>{movie.runtime} min</span>
             </div>

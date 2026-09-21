@@ -32,7 +32,16 @@ export default function MovieCard({
             <div className="mt-2 flex items-center gap-2 text-sm text-secondary-text">
               <span>{movie.year}</span>
               <span className="text-muted-text">•</span>
-              <span>{movie.genre}</span>
+              <div className="flex flex-wrap gap-1.5">
+                {movie.genres.slice(0, 2).map((genre) => (
+                  <span
+                    key={genre}
+                    className="rounded-md bg-surface-hover px-2 py-1 text-xs font-medium text-secondary-text"
+                  >
+                    {genre}
+                  </span>
+                ))}
+              </div>
             </div>
 
             <div className="mt-3 flex items-center gap-1 text-sm">

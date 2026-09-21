@@ -85,7 +85,9 @@ export default function Discover({
   const filteredMovies = moviesToDisplay.filter((movie) => {
     const matchesGenre =
       genre === "all" ||
-      movie.genre.toLowerCase().includes(genre.toLowerCase());
+      movie.genres.some((movieGenre) =>
+        movieGenre.toLowerCase().includes(genre.toLowerCase()),
+      );
 
     return matchesGenre;
   });

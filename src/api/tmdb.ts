@@ -102,7 +102,7 @@ export async function getMovieDetails(id: number): Promise<Movie> {
     title: data.title,
     poster: `https://image.tmdb.org/t/p/w500${data.poster_path}`,
     year: Number(data.release_date.split("-")[0]),
-    genre: data.genres[0]?.name ?? "Unknown",
+    genres: data.genres.map((genre) => genre.name),
     rating: data.vote_average,
     overview: data.overview,
     runtime: data.runtime,
@@ -117,7 +117,7 @@ function mapTMDBMovie(movie: TMDBMovie): Movie {
     title: movie.title,
     poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
     year: Number(movie.release_date.split("-")[0]),
-    genre: GENRES[movie.genre_ids[0]] ?? "Unknown",
+    genres: movie.genre_ids.map((genreId) => GENRES[genreId] ?? "Unknown"),
     rating: movie.vote_average,
   };
 }
