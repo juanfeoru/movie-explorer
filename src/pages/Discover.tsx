@@ -32,6 +32,8 @@ export default function Discover({
   const [page, setPage] = useState(urlPage);
   const [totalPages, setTotalPages] = useState(1);
   const [sort, setSort] = useState<SortType>("default");
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [searchRetry, setSearchRetry] = useState(0);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -54,10 +56,12 @@ export default function Discover({
     async function searchMoviesFromApi() {
       if (!debouncedSearch.trim()) {
         setSearchResults([]);
+        setSearchError(null);
         return;
       }
 
       setSearchLoading(true);
+      setSearchError(null);
 
       try {
         const results = await searchMovies(debouncedSearch, page);
@@ -66,13 +70,14 @@ export default function Discover({
         setTotalPages(results.totalPages);
       } catch {
         setSearchResults([]);
+        setSearchError("Failed to search movies");
       } finally {
         setSearchLoading(false);
       }
     }
 
     searchMoviesFromApi();
-  }, [debouncedSearch, page]);
+  }, [debouncedSearch, page, searchRetry]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -182,6 +187,24 @@ export default function Discover({
         {searchLoading ? (
           <div className="flex min-h-80 items-center justify-center">
             <div className="size-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent" />
+          </div>
+        ) : searchError ? (
+          <div className="flex min-h-80 flex-col items-center justify-center rounded-xl border border-border bg-surface px-6 text-center">
+            <h2 className="text-xl font-semibold text-primary-text">
+              Something went wrong
+            </h2>
+
+            <p className="mt-2 max-w-md text-sm leading-6 text-secondary-text">
+              {searchError}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => setSearchRetry((value) => value + 1)}
+              className="mt-6 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 cursor-pointer"
+            >
+              Try again
+            </button>
           </div>
         ) : filteredMovies.length === 0 ? (
           <div className="flex min-h-80 flex-col items-center justify-center rounded-xl border border-border bg-surface px-6 text-center">
