@@ -12,6 +12,7 @@ function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retry, setRetry] = useState(0);
   const [favorites, setFavorites] = useState<Movie[]>(() => {
     const savedFavorites = localStorage.getItem("favorites");
 
@@ -25,6 +26,9 @@ function App() {
   useEffect(() => {
     async function loadMovies() {
       try {
+        setLoading(true);
+        setError(null);
+
         const data = await getPopularMovies();
 
         setMovies(data);
@@ -36,7 +40,7 @@ function App() {
     }
 
     loadMovies();
-  }, []);
+  }, [retry]);
 
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -94,6 +98,14 @@ function App() {
               <p className="mx-auto max-w-md text-sm text-secondary-text mt-2">
                 {error}
               </p>
+
+              <button
+                type="button"
+                onClick={() => setRetry((value) => value + 1)}
+                className="mt-6 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 cursor-pointer"
+              >
+                Try again
+              </button>
             </div>
           </div>
         ) : (
