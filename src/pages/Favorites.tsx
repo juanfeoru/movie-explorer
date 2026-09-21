@@ -51,7 +51,7 @@ export default function Favorites({
           <p className="mt-1 text-xs text-muted-text">
             {favorites.length} {favorites.length === 1 ? "movie" : "movies"}{" "}
             saved
-          </p>{" "}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">

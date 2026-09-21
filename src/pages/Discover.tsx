@@ -19,7 +19,6 @@ export default function Discover({
   handleFavorites,
   favorites,
 }: DiscoverProps) {
-  type GenreType = "all" | string;
   type SortType = "default" | "rating-desc" | "date-desc" | "title-asc";
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,7 +28,7 @@ export default function Discover({
 
   const [search, setSearch] = useState(urlSearch ?? "");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
-  const [genre, setGenre] = useState<GenreType>("all");
+  const [genre, setGenre] = useState("all");
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [page, setPage] = useState(urlPage);
@@ -252,33 +251,36 @@ export default function Discover({
               handleFavorites={handleFavorites}
               favorites={favorites}
             />
-            <div className="mt-10 flex items-center justify-center gap-4">
-              <button
-                type="button"
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1 || searchLoading}
-                className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-primary-text transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-surface cursor-pointer"
-              >
-                Previous
-              </button>
+            {search.trim() && (
+              <div className="mt-10 flex items-center justify-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1 || searchLoading}
+                  className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-primary-text transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-surface cursor-pointer"
+                >
+                  Previous
+                </button>
 
-              <span className="text-sm text-secondary-text">
-                Page{" "}
-                <span className="font-medium text-primary-text">{page}</span> of{" "}
-                <span className="font-medium text-primary-text">
-                  {totalPages}
+                <span className="text-sm text-secondary-text">
+                  Page{" "}
+                  <span className="font-medium text-primary-text">{page}</span>{" "}
+                  of{" "}
+                  <span className="font-medium text-primary-text">
+                    {totalPages}
+                  </span>
                 </span>
-              </span>
 
-              <button
-                type="button"
-                onClick={() => setPage(page + 1)}
-                disabled={page === totalPages || searchLoading}
-                className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-primary-text transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-surface cursor-pointer"
-              >
-                Next
-              </button>
-            </div>
+                <button
+                  type="button"
+                  onClick={() => setPage(page + 1)}
+                  disabled={page === totalPages || searchLoading}
+                  className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-primary-text transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-surface cursor-pointer"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

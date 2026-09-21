@@ -43,6 +43,7 @@ export default function Hero() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-hidden="true"
                 className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-muted-text"
               >
                 <path d="m21 21-4.34-4.34" />

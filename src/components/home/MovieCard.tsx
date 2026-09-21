@@ -30,7 +30,7 @@ export default function MovieCard({
             </h3>
 
             <div className="mt-2 flex items-center gap-2 text-sm text-secondary-text">
-              <span>{movie.year}</span>
+              <span>{movie.year || "Unknown year"}</span>
               <span className="text-muted-text">•</span>
               <div className="flex flex-wrap gap-1.5">
                 {movie.genres.slice(0, 2).map((genre) => (
