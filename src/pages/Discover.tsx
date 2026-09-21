@@ -145,13 +145,14 @@ export default function Discover({
               strokeLinecap="round"
               strokeLinejoin="round"
               className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-muted-text"
+              aria-hidden="true"
             >
               <path d="m21 21-4.34-4.34" />
               <circle cx="11" cy="11" r="8" />
             </svg>
 
             <input
-              type="search"
+              type="text"
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -159,10 +160,36 @@ export default function Discover({
               }}
               placeholder="Search for a movie..."
               aria-label="Search for a movie"
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 pl-11 text-sm text-primary-text outline-none transition placeholder:text-muted-text"
+              className="w-full rounded-xl border border-border bg-surface px-4 py-3 pl-11 pr-11 text-sm text-primary-text outline-none transition placeholder:text-muted-text"
             />
-          </div>
 
+            {search && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+                className="absolute right-3 top-1/2 flex size-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full text-muted-text transition hover:bg-surface-hover hover:text-primary-text"
+                aria-label="Clear search"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-4"
+                  aria-hidden="true"
+                >
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
           <select
             value={genre}
             onChange={(e) => setGenre(e.target.value)}

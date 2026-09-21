@@ -56,6 +56,11 @@ export default function Hero() {
                 placeholder="Search for a movie..."
                 aria-label="Search for a movie"
                 className="w-full flex-1 bg-transparent px-4 py-3 pl-11 text-sm text-primary-text outline-none placeholder:text-muted-text"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
               />
             </div>
 
