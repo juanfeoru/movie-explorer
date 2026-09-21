@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router";
 import Discover from "./pages/Discover";
 import MovieDetails from "./pages/MovieDetails";
 import { getPopularMovies } from "./api/tmdb";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -151,6 +152,8 @@ function App() {
                 />
               }
             />
+
+            <Route path="*" element={<NotFound />} />
           </Routes>
         )}
       </main>
