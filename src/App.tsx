@@ -8,6 +8,8 @@ import Discover from "./pages/Discover";
 import MovieDetails from "./pages/MovieDetails";
 import { getPopularMovies } from "./api/tmdb";
 import NotFound from "./pages/NotFound";
+import LoadingState from "./components/ui/LoadingState";
+import ErrorState from "./components/ui/ErrorState";
 
 function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -66,49 +68,12 @@ function App() {
       <Header />
       <main>
         {loading ? (
-          <div className="flex min-h-screen items-center justify-center bg-bg">
-            <div className="text-center">
-              <div className="mx-auto mb-4 size-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent" />
-              <p className="text-sm text-secondary-text">Loading movies...</p>
-            </div>
-          </div>
+          <LoadingState message="Loading movies..." />
         ) : error ? (
-          <div className="flex min-h-screen items-center justify-center bg-bg px-5">
-            <div className="text-center">
-              <div className="mx-auto mb-5 flex size-12 items-center justify-center rounded-full bg-accent/10 text-accent">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v3.75m0 3.75h.008M10.29 3.86 2.82 17.11A2 2 0 0 0 4.56 20h14.88a2 2 0 0 0 1.74-2.89L13.71 3.86a2 2 0 0 0-3.42 0Z"
-                  />
-                </svg>
-              </div>
-
-              <h2 className="mb-2 text-lg font-semibold text-primary-text">
-                Something went wrong
-              </h2>
-
-              <p className="mx-auto max-w-md text-sm text-secondary-text mt-2">
-                {error}
-              </p>
-
-              <button
-                type="button"
-                onClick={() => setRetry((value) => value + 1)}
-                className="mt-6 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 cursor-pointer"
-              >
-                Try again
-              </button>
-            </div>
-          </div>
+          <ErrorState
+            message={error}
+            onRetry={() => setRetry((value) => value + 1)}
+          />
         ) : (
           <Routes>
             <Route

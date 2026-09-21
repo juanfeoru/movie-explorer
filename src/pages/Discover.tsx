@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { searchMovies } from "../api/tmdb";
 import { GENRES } from "../constants/genres";
 import { useSearchParams } from "react-router";
+import LoadingState from "../components/ui/LoadingState";
+import ErrorState from "../components/ui/ErrorState";
+import EmptyState from "../components/ui/EmptyState";
 
 interface DiscoverProps {
   movies: Movie[];
@@ -188,30 +191,15 @@ export default function Discover({
           </select>
         </div>
         {searchLoading ? (
-          <div className="flex min-h-80 items-center justify-center">
-            <div className="size-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent" />
-          </div>
+          <LoadingState message="Searching movies..." />
         ) : searchError ? (
-          <div className="flex min-h-80 flex-col items-center justify-center rounded-xl border border-border bg-surface px-6 text-center">
-            <h2 className="text-xl font-semibold text-primary-text">
-              Something went wrong
-            </h2>
-
-            <p className="mt-2 max-w-md text-sm leading-6 text-secondary-text">
-              {searchError}
-            </p>
-
-            <button
-              type="button"
-              onClick={() => setSearchRetry((value) => value + 1)}
-              className="mt-6 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 cursor-pointer"
-            >
-              Try again
-            </button>
-          </div>
+          <ErrorState
+            message={searchError}
+            onRetry={() => setSearchRetry((value) => value + 1)}
+          />
         ) : filteredMovies.length === 0 ? (
-          <div className="flex min-h-80 flex-col items-center justify-center rounded-xl border border-border bg-surface px-6 text-center">
-            <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-surface-hover text-accent">
+          <EmptyState
+            icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -221,22 +209,15 @@ export default function Discover({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="size-6"
+                aria-hidden="true"
               >
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.3-4.3" />
-                <path d="M8 11h6" />
               </svg>
-            </div>
-
-            <h2 className="text-xl font-semibold text-primary-text">
-              No movies found
-            </h2>
-
-            <p className="mt-2 max-w-md text-sm leading-6 text-secondary-text">
-              We couldn't find any movies matching your search or selected
-              genre. Try changing your filters.
-            </p>
-          </div>
+            }
+            title="No movies found"
+            message="Try searching for another movie or changing your filters."
+          />
         ) : (
           <>
             <MovieGrid

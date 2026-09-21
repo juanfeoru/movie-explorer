@@ -1,6 +1,6 @@
-import { Link } from "react-router";
 import MovieCard from "../components/home/MovieCard";
 import type { Movie } from "../types/movies";
+import EmptyState from "../components/ui/EmptyState";
 
 interface FavoritesProps {
   favorites: Movie[];
@@ -13,29 +13,25 @@ export default function Favorites({
 }: FavoritesProps) {
   if (favorites.length === 0) {
     return (
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="text-sm font-semibold uppercase tracking-widest text-accent">
-            Your collection
-          </span>
-
-          <h1 className="mt-4 text-4xl font-bold tracking-tight text-primary-text sm:text-5xl">
-            Your Favorites
-          </h1>
-
-          <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-secondary-text mb-8">
-            You haven't added any movies to your favorites yet. Start exploring
-            and save the movies you want to watch later.
-          </p>
-
-          <Link
-            to="/"
-            className="rounded-lg bg-accent px-5 py-3 text-sm font-medium text-primary-text transition hover:opacity-90 cursor-pointer"
+      <EmptyState
+        icon={
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-6"
+            aria-hidden="true"
           >
-            Explore Movies
-          </Link>
-        </div>
-      </section>
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
+          </svg>
+        }
+        title="No favorite movies"
+        message="You haven't added any movies to your favorites yet."
+      />
     );
   }
 
