@@ -11,6 +11,20 @@ import NotFound from "./pages/NotFound";
 import LoadingState from "./components/ui/LoadingState";
 import ErrorState from "./components/ui/ErrorState";
 
+function getSavedFavorites(): Movie[] {
+  const savedFavorites = localStorage.getItem("favorites");
+
+  if (!savedFavorites) {
+    return [];
+  }
+
+  try {
+    return JSON.parse(savedFavorites);
+  } catch {
+    return [];
+  }
+}
+
 function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,20 +67,6 @@ function App() {
 
       return [...currentFavorites, movie];
     });
-  }
-
-  function getSavedFavorites(): Movie[] {
-    const savedFavorites = localStorage.getItem("favorites");
-
-    if (!savedFavorites) {
-      return [];
-    }
-
-    try {
-      return JSON.parse(savedFavorites);
-    } catch {
-      return [];
-    }
   }
 
   return (
