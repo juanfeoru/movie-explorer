@@ -21,15 +21,36 @@ export default function Discover({
   const [searchParams, setSearchParams] = useSearchParams();
 
   const urlSearch = searchParams.get("search");
+  const urlPage = Number(searchParams.get("page")) || 1;
 
   const [search, setSearch] = useState(urlSearch ?? "");
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [genre, setGenre] = useState<GenreType>("all");
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [page, setPage] = useState(urlPage);
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setPage(1);
+
+      if (search.trim()) {
+        setSearchParams({
+          search: search,
+          page: "1",
+        });
+      } else {
+        setSearchParams({});
+      }
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [search, setSearchParams]);
 
   useEffect(() => {
     async function searchMoviesFromApi() {
-      if (!search.trim()) {
+      if (!debouncedSearch.trim()) {
         setSearchResults([]);
         return;
       }
@@ -37,9 +58,10 @@ export default function Discover({
       setSearchLoading(true);
 
       try {
-        const results = await searchMovies(search);
+        const results = await searchMovies(debouncedSearch, page);
 
-        setSearchResults(results);
+        setSearchResults(results.movies);
+        setTotalPages(results.totalPages);
       } catch {
         setSearchResults([]);
       } finally {
@@ -47,16 +69,16 @@ export default function Discover({
       }
     }
 
-    const timeout = setTimeout(() => {
-      searchMoviesFromApi();
+    searchMoviesFromApi();
+  }, [debouncedSearch, page]);
 
-      setSearchParams({
-        search: search,
-      });
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, [search, setSearchParams]);
+  }, [search]);
 
   const moviesToDisplay = search.trim() ? searchResults : movies;
 
@@ -105,6 +127,7 @@ export default function Discover({
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
+                setPage(1);
               }}
               placeholder="Search for a movie..."
               className="w-full rounded-xl border border-border bg-surface px-4 py-3 pl-11 text-sm text-primary-text outline-none transition placeholder:text-muted-text focus:border-accent"
@@ -158,11 +181,40 @@ export default function Discover({
             </p>
           </div>
         ) : (
-          <MovieGrid
-            movies={filteredMovies}
-            handleFavorites={handleFavorites}
-            favorites={favorites}
-          />
+          <>
+            <MovieGrid
+              movies={filteredMovies}
+              handleFavorites={handleFavorites}
+              favorites={favorites}
+            />
+            <div className="mt-10 flex items-center justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1 || searchLoading}
+                className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-primary-text transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-surface cursor-pointer"
+              >
+                Previous
+              </button>
+
+              <span className="text-sm text-secondary-text">
+                Page{" "}
+                <span className="font-medium text-primary-text">{page}</span> of{" "}
+                <span className="font-medium text-primary-text">
+                  {totalPages}
+                </span>
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setPage(page + 1)}
+                disabled={page === totalPages || searchLoading}
+                className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-primary-text transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-surface cursor-pointer"
+              >
+                Next
+              </button>
+            </div>
+          </>
         )}
       </div>
     </section>

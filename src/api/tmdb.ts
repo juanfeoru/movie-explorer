@@ -27,6 +27,12 @@ interface TMDBMovieDetails {
   runtime: number;
 }
 
+interface SearchMoviesResponse {
+  movies: Movie[];
+  page: number;
+  totalPages: number;
+}
+
 export async function getPopularMovies(): Promise<Movie[]> {
   const response = await fetch(`${TMDB_BASE_URL}/movie/popular`, {
     headers: {
@@ -46,11 +52,14 @@ export async function getPopularMovies(): Promise<Movie[]> {
   return movies;
 }
 
-export async function searchMovies(query: string): Promise<Movie[]> {
+export async function searchMovies(
+  query: string,
+  page: number,
+): Promise<SearchMoviesResponse> {
   const encodedQuery = encodeURIComponent(query);
 
   const response = await fetch(
-    `${TMDB_BASE_URL}/search/movie?query=${encodedQuery}`,
+    `${TMDB_BASE_URL}/search/movie?query=${encodedQuery}&page=${page}`,
     {
       headers: {
         Authorization: `Bearer ${TMDB_TOKEN}`,
@@ -67,7 +76,11 @@ export async function searchMovies(query: string): Promise<Movie[]> {
 
   const movies = data.results.map(mapTMDBMovie);
 
-  return movies;
+  return {
+    movies,
+    page: data.page,
+    totalPages: data.total_pages,
+  };
 }
 
 export async function getMovieDetails(id: number): Promise<Movie> {
