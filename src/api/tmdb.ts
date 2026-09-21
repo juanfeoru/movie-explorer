@@ -16,15 +16,15 @@ interface TMDBMovie {
 interface TMDBMovieDetails {
   id: number;
   title: string;
-  poster_path: string;
-  release_date: string;
+  poster_path: string | null;
+  release_date: string | null;
   vote_average: number;
   genres: {
     id: number;
     name: string;
   }[];
   overview: string;
-  runtime: number;
+  runtime: number | null;
 }
 
 interface SearchMoviesResponse {
@@ -100,12 +100,14 @@ export async function getMovieDetails(id: number): Promise<Movie> {
   const movie = {
     id: data.id,
     title: data.title,
-    poster: `https://image.tmdb.org/t/p/w500${data.poster_path}`,
-    year: Number(data.release_date.split("-")[0]),
+    poster: data.poster_path
+      ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
+      : "/placeholder-movie.jpg",
+    year: data.release_date ? Number(data.release_date.split("-")[0]) : 0,
     genres: data.genres.map((genre) => genre.name),
     rating: data.vote_average,
     overview: data.overview,
-    runtime: data.runtime,
+    runtime: data.runtime ?? undefined,
   };
 
   return movie;

@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import type { Movie } from "../types/movies";
 import { useEffect, useState } from "react";
 import { getMovieDetails } from "../api/tmdb";
@@ -14,9 +14,12 @@ export default function MovieDetails({
 }: MovieDetailsProps) {
   const { id } = useParams();
 
+  const navigate = useNavigate();
+
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retry, setRetry] = useState(0);
 
   useEffect(() => {
     async function loadMovie() {
@@ -37,7 +40,7 @@ export default function MovieDetails({
     }
 
     loadMovie();
-  }, [id]);
+  }, [id, retry]);
 
   if (loading) {
     return (
@@ -82,6 +85,14 @@ export default function MovieDetails({
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-secondary-text">
             {error}
           </p>
+
+          <button
+            type="button"
+            onClick={() => setRetry((value) => value + 1)}
+            className="mt-6 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 cursor-pointer"
+          >
+            Try again
+          </button>
         </div>
       </section>
     );
@@ -107,9 +118,10 @@ export default function MovieDetails({
   return (
     <section className="min-h-[calc(100vh-4rem)] bg-bg px-6 py-12">
       <div className="mx-auto max-w-6xl">
-        <Link
-          to="/"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-secondary-text transition hover:text-primary-text"
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="mb-8 inline-flex items-center gap-2 text-sm text-secondary-text transition hover:text-primary-text cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -126,39 +138,47 @@ export default function MovieDetails({
             <path d="M6 8L2 12L6 16" />
             <path d="M2 12H22" />
           </svg>
-          Back to Home
-        </Link>
+          Back
+        </button>
 
-        <div className="grid gap-8 md:grid-cols-[280px_1fr]">
+        <div className="grid gap-10 md:grid-cols-[280px_1fr] md:items-start lg:grid-cols-[320px_1fr]">
           <img
             src={movie.poster}
             alt={movie.title}
-            className="mx-auto w-full max-w-70 rounded-2xl object-cover shadow-2xl"
+            className="mx-auto w-full max-w-70 rounded-2xl object-cover shadow-2xl md:mx-0 lg:max-w-80"
           />
 
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-primary-text sm:text-4xl">
+            <h1 className="text-3xl font-bold tracking-tight text-primary-text sm:text-4xl lg:text-5xl">
               {movie.title}
             </h1>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-secondary-text">
+              <div className="flex items-center gap-3">
+                <span>{movie.year || "Unknown year"}</span>
 
-            <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-secondary-text">
-              <span>{movie.year}</span>
-              <span>•</span>
+                {movie.runtime && (
+                  <>
+                    <span>•</span>
+                    <span>{movie.runtime} min</span>
+                  </>
+                )}
+              </div>
+
+              <span className="hidden sm:inline">•</span>
+
               <div className="flex flex-wrap gap-2">
                 {movie.genres.map((genre) => (
                   <span
                     key={genre}
-                    className="rounded-full border border-border bg-surface px-3 py-1 text-sm text-secondary-text"
+                    className="rounded-md border border-border bg-surface px-2.5 py-1 text-xs text-secondary-text"
                   >
                     {genre}
                   </span>
                 ))}
               </div>
-              <span>•</span>
-              <span>{movie.runtime} min</span>
             </div>
 
-            <div className="mt-5 flex items-center gap-2">
+            <div className="mt-5 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2">
               <span className="text-accent">★</span>
 
               <span className="font-semibold text-primary-text">
@@ -167,45 +187,45 @@ export default function MovieDetails({
 
               <span className="text-sm text-muted-text">/ 10</span>
             </div>
-
-            <button
-              onClick={() => handleFavorites(movie)}
-              className={`mt-6 inline-flex w-fit cursor-pointer items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition ${
-                isFavorite
-                  ? "bg-accent text-white"
-                  : "border border-border bg-surface text-primary-text hover:border-accent hover:text-accent"
-              }`}
-              aria-label={
-                isFavorite
-                  ? `Remove ${movie.title} from favorites`
-                  : `Add ${movie.title} to favorites`
-              }
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill={isFavorite ? "currentColor" : "none"}
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="size-4"
+            <div>
+              <button
+                onClick={() => handleFavorites(movie)}
+                className={`mt-6 inline-flex w-fit cursor-pointer items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium transition ${
+                  isFavorite
+                    ? "bg-accent text-white hover:opacity-90"
+                    : "border border-border bg-surface text-primary-text hover:border-accent hover:text-accent"
+                }`}
+                aria-label={
+                  isFavorite
+                    ? `Remove ${movie.title} from favorites`
+                    : `Add ${movie.title} to favorites`
+                }
               >
-                <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
-              </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill={isFavorite ? "currentColor" : "none"}
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-4"
+                >
+                  <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+                </svg>
 
-              {isFavorite ? "Remove from favorites" : "Add to favorites"}
-            </button>
-
-            <div className="mt-8">
-              <h2 className="text-lg font-semibold text-primary-text">
+                {isFavorite ? "Remove from favorites" : "Add to favorites"}
+              </button>
+            </div>
+            <div className="mt-10 border-t border-border pt-8">
+              <h2 className="text-xl font-semibold text-primary-text">
                 Overview
               </h2>
 
               <p className="mt-3 max-w-2xl text-sm leading-7 text-secondary-text">
-                {movie.overview}
+                {movie.overview || "No overview available for this movie."}
               </p>
             </div>
           </div>
