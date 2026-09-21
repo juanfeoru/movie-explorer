@@ -16,15 +16,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retry, setRetry] = useState(0);
-  const [favorites, setFavorites] = useState<Movie[]>(() => {
-    const savedFavorites = localStorage.getItem("favorites");
-
-    if (savedFavorites) {
-      return JSON.parse(savedFavorites);
-    }
-
-    return [];
-  });
+  const [favorites, setFavorites] = useState<Movie[]>(getSavedFavorites);
 
   useEffect(() => {
     async function loadMovies() {
@@ -61,6 +53,20 @@ function App() {
 
       return [...currentFavorites, movie];
     });
+  }
+
+  function getSavedFavorites(): Movie[] {
+    const savedFavorites = localStorage.getItem("favorites");
+
+    if (!savedFavorites) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(savedFavorites);
+    } catch {
+      return [];
+    }
   }
 
   return (

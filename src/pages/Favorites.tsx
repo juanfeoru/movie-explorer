@@ -42,14 +42,16 @@ export default function Favorites({
           <span className="text-sm font-semibold uppercase tracking-widest text-accent">
             Your collection
           </span>
-
           <h1 className="mt-1 text-3xl font-bold tracking-tight text-primary-text sm:text-4xl">
             Your Favorites
           </h1>
-
           <p className="mt-2 text-sm text-secondary-text">
             Movies you've saved for later.
           </p>
+          <p className="mt-1 text-xs text-muted-text">
+            {favorites.length} {favorites.length === 1 ? "movie" : "movies"}{" "}
+            saved
+          </p>{" "}
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
