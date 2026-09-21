@@ -56,6 +56,7 @@ export default function MovieCard({
         <button
           type="button"
           onClick={() => handleFavorites(movie)}
+          aria-pressed={isFavorite}
           className={`absolute right-3 top-3 flex size-8 items-center justify-center rounded-full backdrop-blur-sm transition cursor-pointer ${
             isFavorite
               ? "bg-accent text-white"

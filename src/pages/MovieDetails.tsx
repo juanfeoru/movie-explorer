@@ -200,6 +200,7 @@ export default function MovieDetails({
                     ? `Remove ${movie.title} from favorites`
                     : `Add ${movie.title} to favorites`
                 }
+                aria-pressed={isFavorite}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
