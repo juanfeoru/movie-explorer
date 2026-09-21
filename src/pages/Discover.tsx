@@ -155,13 +155,15 @@ export default function Discover({
                 setPage(1);
               }}
               placeholder="Search for a movie..."
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 pl-11 text-sm text-primary-text outline-none transition placeholder:text-muted-text focus:border-accent"
+              aria-label="Search for a movie"
+              className="w-full rounded-xl border border-border bg-surface px-4 py-3 pl-11 text-sm text-primary-text outline-none transition placeholder:text-muted-text"
             />
           </div>
 
           <select
             value={genre}
             onChange={(e) => setGenre(e.target.value)}
+            aria-label="Filter by genre"
             className="cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-secondary-text outline-none transition focus:border-accent"
           >
             <option value="all">All genres</option>
@@ -176,6 +178,7 @@ export default function Discover({
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortType)}
+            aria-label="Sort movies"
             className="cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-secondary-text outline-none transition focus:border-accent"
           >
             <option value="default">Sort</option>

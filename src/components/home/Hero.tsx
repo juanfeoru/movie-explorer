@@ -54,11 +54,13 @@ export default function Hero() {
                 onChange={(e) => setSearch(e.target.value)}
                 type="text"
                 placeholder="Search for a movie..."
+                aria-label="Search for a movie"
                 className="w-full flex-1 bg-transparent px-4 py-3 pl-11 text-sm text-primary-text outline-none placeholder:text-muted-text"
               />
             </div>
 
             <button
+              type="button"
               onClick={handleSearch}
               className="rounded-lg bg-accent px-5 py-3 text-sm font-medium text-primary-text transition hover:opacity-90 cursor-pointer"
             >
@@ -67,9 +69,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <p className="mt-3 text-xs text-muted-text">
-          Search by title, actor of genre
-        </p>
+        <p className="mt-3 text-xs text-muted-text">Search by title</p>
       </div>
     </section>
   );

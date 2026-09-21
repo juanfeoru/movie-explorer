@@ -73,6 +73,8 @@ export default function Header() {
           type="button"
           className="ml-auto cursor-pointer md:hidden"
           aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
           onClick={() => setIsOpen((open) => !open)}
         >
           {isOpen ? (
@@ -109,7 +111,10 @@ export default function Header() {
       </div>
 
       {isOpen && (
-        <div className="absolute left-0 top-16 z-50 w-full border-b border-border bg-surface md:hidden">
+        <div
+          id="mobile-menu"
+          className="absolute left-0 top-16 z-50 w-full border-b border-border bg-surface md:hidden"
+        >
           <nav className="flex flex-col px-6 py-4">
             <NavLink
               to="/"
