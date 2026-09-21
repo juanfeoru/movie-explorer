@@ -17,6 +17,7 @@ export default function Discover({
   favorites,
 }: DiscoverProps) {
   type GenreType = "all" | string;
+  type SortType = "default" | "rating-desc" | "date-desc" | "title-asc";
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -30,6 +31,7 @@ export default function Discover({
   const [searchLoading, setSearchLoading] = useState(false);
   const [page, setPage] = useState(urlPage);
   const [totalPages, setTotalPages] = useState(1);
+  const [sort, setSort] = useState<SortType>("default");
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -92,6 +94,22 @@ export default function Discover({
     return matchesGenre;
   });
 
+  const sortedMovies = [...filteredMovies].sort((a, b) => {
+    if (sort === "rating-desc") {
+      return b.rating - a.rating;
+    }
+
+    if (sort === "date-desc") {
+      return b.year - a.year;
+    }
+
+    if (sort === "title-asc") {
+      return a.title.localeCompare(b.title);
+    }
+
+    return 0;
+  });
+
   return (
     <section className="px-6 py-12">
       <div className="mx-auto max-w-7xl">
@@ -149,6 +167,17 @@ export default function Discover({
               </option>
             ))}
           </select>
+
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortType)}
+            className="cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-secondary-text outline-none transition focus:border-accent"
+          >
+            <option value="default">Sort</option>
+            <option value="rating-desc">Rating: High to Low</option>
+            <option value="date-desc">Newest</option>
+            <option value="title-asc">Title: A to Z</option>
+          </select>
         </div>
         {searchLoading ? (
           <div className="flex min-h-80 items-center justify-center">
@@ -185,7 +214,7 @@ export default function Discover({
         ) : (
           <>
             <MovieGrid
-              movies={filteredMovies}
+              movies={sortedMovies}
               handleFavorites={handleFavorites}
               favorites={favorites}
             />
