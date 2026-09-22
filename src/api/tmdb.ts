@@ -1,9 +1,6 @@
 import type { Movie } from "../types/movies";
 import { mapTMDBMovie } from "../utils/movie";
 
-const TMDB_BASE_URL = "https://api.themoviedb.org/3";
-const TMDB_TOKEN = import.meta.env.VITE_TMDB_TOKEN;
-
 interface TMDBMovieDetails {
   id: number;
   title: string;
@@ -25,12 +22,7 @@ interface SearchMoviesResponse {
 }
 
 export async function getPopularMovies(): Promise<Movie[]> {
-  const response = await fetch(`${TMDB_BASE_URL}/movie/popular`, {
-    headers: {
-      Authorization: `Bearer ${TMDB_TOKEN}`,
-      accept: "application/json",
-    },
-  });
+  const response = await fetch("/api/movies");
 
   if (!response.ok) {
     throw new Error("Failed to fetch popular movies");
@@ -50,13 +42,7 @@ export async function searchMovies(
   const encodedQuery = encodeURIComponent(query);
 
   const response = await fetch(
-    `${TMDB_BASE_URL}/search/movie?query=${encodedQuery}&page=${page}`,
-    {
-      headers: {
-        Authorization: `Bearer ${TMDB_TOKEN}`,
-        accept: "application/json",
-      },
-    },
+    `/api/movies?type=search&query=${encodedQuery}&page=${page}`,
   );
 
   if (!response.ok) {
@@ -75,12 +61,7 @@ export async function searchMovies(
 }
 
 export async function getMovieDetails(id: number): Promise<Movie> {
-  const response = await fetch(`${TMDB_BASE_URL}/movie/${id}`, {
-    headers: {
-      Authorization: `Bearer ${TMDB_TOKEN}`,
-      accept: "application/json",
-    },
-  });
+  const response = await fetch(`/api/movies?type=details&id=${id}`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch movie details");
@@ -88,7 +69,7 @@ export async function getMovieDetails(id: number): Promise<Movie> {
 
   const data: TMDBMovieDetails = await response.json();
 
-  const movie = {
+  return {
     id: data.id,
     title: data.title,
     poster: data.poster_path
@@ -100,6 +81,4 @@ export async function getMovieDetails(id: number): Promise<Movie> {
     overview: data.overview,
     runtime: data.runtime ?? undefined,
   };
-
-  return movie;
 }
